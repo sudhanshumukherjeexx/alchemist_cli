@@ -3,6 +3,9 @@ import polars as pl
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+from urllib.request import urlopen
+import json
+
 
 # Set Plotly template
 import plotly.io as pio
@@ -126,6 +129,17 @@ def violin_plot(dataframe):
     fig = px.violin(dataframe, y=y_axis, title=f"Violin Plot of {y_axis}.", color_discrete_sequence=px.colors.sequential.Teal)
     st.plotly_chart(fig)
 
+# Function to plot line plot
+def plot_line(dataframe):
+    st.markdown('Visualize your feature - Line Plot')
+    x_axis = st.selectbox('Choose your Feature 1', options=dataframe.columns, index=None, placeholder="[ Select X-Axis value ]",)
+    y_axis = st.selectbox('Choose your Feature 2', options=dataframe.columns, index=None, placeholder="[ Select Y-Axis value ]",)
+    st.divider()
+    hue = st.selectbox("Color your scatter plot based on feature", options=df.columns, index=None, placeholder="[ Select your Feature ]",)
+    fig1 = px.line(dataframe, x=x_axis, y=y_axis,color=hue)
+    st.plotly_chart(fig1)
+
+
 # Function to plot 3D Scatter Plot
 def plot_scatter_3d(dataframe):
     st.markdown('Visualize your feature - 3D Scatter Plot')
@@ -148,6 +162,57 @@ def plot_line_3d(dataframe):
     fig1 = px.line_3d(dataframe, x=x_axis, y=y_axis,z=z_axis, color=hue)
     st.plotly_chart(fig1)
 
+#Function to plot Polar Scatter
+def plot_scatter_polar(dataframe):
+    st.markdown('Visualize your feature - Polar Scatter')
+    x_axis = st.selectbox('Choose your Feature 1', options=dataframe.columns, index=None, placeholder="[ Select X-Axis value ]",)
+    y_axis = st.selectbox('Choose your Feature 2', options=dataframe.columns, index=None, placeholder="[ Select Y-Axis value ]",)
+    hue = st.selectbox('Choose a feature to view results based on color', options=dataframe.columns, index=None, placeholder="[ Select Z-Axis value ]",)
+    st.divider()
+    shape = st.selectbox("Choose a feature to display results based on different shapes.", options=df.columns, index=None, placeholder="[ Select your Feature ]",)
+    fig1 = px.scatter_polar(dataframe, r=x_axis, theta=y_axis, color=hue, symbol=shape, color_discrete_sequence=px.colors.sequential.Plasma_r)
+    st.plotly_chart(fig1)
+
+
+# Function to plot Polar Scatter
+def plot_bar_polar(dataframe):
+    st.markdown('Visualize your feature - Polar Bar')
+    x_axis = st.selectbox('Choose your Feature 1', options=dataframe.columns, index=None, placeholder="[ Select X-Axis value ]",)
+    y_axis = st.selectbox('Choose your Feature 2', options=dataframe.columns, index=None, placeholder="[ Select Y-Axis value ]",)
+    hue = st.selectbox('Choose a feature to view results based on color', options=dataframe.columns, index=None, placeholder="[ Select Z-Axis value ]",)
+    st.divider()
+    shape = st.selectbox("Choose a feature to display results based on different shapes.", options=df.columns, index=None, placeholder="[ Select your Feature ]",)
+    fig1 = px.bar_polar(dataframe, r=x_axis, theta=y_axis, color=hue, symbol=shape, color_discrete_sequence=px.colors.sequential.Plasma_r)
+    st.plotly_chart(fig1)
+
+
+# Funtion to plot tile map
+def plot_tile_map(dataframe):
+    st.markdown('Visualize your feature - Tile Map')
+    x_axis = st.selectbox('Latitude', options=dataframe.columns, index=None, placeholder="[ Select X-Axis value ]",)
+    y_axis = st.selectbox('Longitude', options=dataframe.columns, index=None, placeholder="[ Select Y-Axis value ]",)
+    #options = st.multiselect(dataframe.columns)
+    st.divider()
+    shape = st.multiselect("Choose a feature to display results based on different shapes.", options=df.columns,placeholder="[ Select your Feature ]",)
+    fig1 = px.scatter_mapbox(dataframe, lat=x_axis, lon=y_axis, hover_data=shape, color_discrete_sequence=["fuchsia"])
+    fig1.update_layout(mapbox_style="open-street-map")
+    st.plotly_chart(fig1)
+
+def plot_choropleth_map(dataframe):
+    st.markdown('Visualize your feature - Tile Map')
+    st.subheader("Best to visualize US data if FIPS code is available in your data.")
+
+    with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
+        counties = json.load(response)
+    
+    x_axis = st.selectbox('FIPS Code', options=dataframe.columns, index=None, placeholder="[ FIPS Code ]",)
+    y_axis = st.selectbox('Choose a feature to visualize based on FIPS code.', options=dataframe.columns, index=None, placeholder="[ Choose a feature to visualize based on FIPS code. ]",)
+    #options = st.multiselect(dataframe.columns)
+    st.divider()
+    fig1 = px.choropleth(dataframe, geojson=counties, locations=x_axis, color=y_axis, color_continuous_scale="Viridis",range_color=(0,12), scope="usa", labels={'{y_axis}': '{y_axis} Rate'})
+    st.plotly_chart(fig1)
+
+
 
 # # Initial Structure and Functionalities
 # st.title('Prepup : Pre Processing Utility Package')
@@ -169,11 +234,16 @@ else:
         {"image_url": "images/histogram.png", "button_label": "Histogram", "action": plot_histogram},
         {"image_url": "images/statistic.png", "button_label": "Bar Chart", "action": plot_barchart},
         {"image_url": "images/pie_chart.png", "button_label": "Pie Chart", "action": pie_chart},
+        {"image_url": "images/line.png", "button_label": "Line Plot", "action": plot_line},
         {"image_url": "images/hist2dcontour.png", "button_label": "2D Hist Contour", "action": create_2d_hist_contour},
         {"image_url": "images/contour.png", "button_label": "Contour Plot", "action": create_contour_plot},
         {"image_url": "images/violin.png", "button_label": "Violin Plot", "action": violin_plot},
         {"image_url": "images/3d_scatter.png", "button_label": "3D Scatter Plot", "action": plot_scatter_3d},
         {"image_url": "images/3d_line.png", "button_label": "3D Line Plot", "action": plot_line_3d},
+        {"image_url": "images/polar_scatter.png", "button_label": "Polar Scatter", "action": plot_scatter_polar},
+        {"image_url": "images/polar_bar.png", "button_label": "Polar Bar", "action": plot_bar_polar},
+        {"image_url": "images/tile_map.png", "button_label": "Tile Map", "action": plot_tile_map},
+        {"image_url": "images/choropleth_map.png", "button_label": "Choropleth Map", "action": plot_choropleth_map},
     ]
 
     # st.divider()
@@ -223,3 +293,13 @@ else:
             plot_scatter_3d(df)
         elif st.session_state.page == 'plot_line_3d':
             plot_line_3d(df)
+        elif st.session_state.page == 'plot_line':
+            plot_line(df)
+        elif st.session_state.page == 'plot_scatter_polar':
+            plot_scatter_polar(df)
+        elif st.session_state.page == 'plot_bar_polar':
+            plot_bar_polar(df)
+        elif st.session_state.page == 'plot_tile_map':
+            plot_tile_map(df)
+        elif st.session_state.page == 'plot_choropleth_map':
+            plot_choropleth_map(df)
