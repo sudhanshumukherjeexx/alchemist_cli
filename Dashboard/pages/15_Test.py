@@ -274,3 +274,34 @@
 #     create_contour_plot(dtype_select_df)
 #     st.divider()
 
+
+
+
+
+# TILE MAP
+# def plot_map(dataframe):
+#     x_axis = st.selectbox('Latitude', options=dataframe.columns, index=None, placeholder="[ Select X-Axis value ]",)
+#     y_axis = st.selectbox('Longitude', options=dataframe.columns, index=None, placeholder="[ Select Y-Axis value ]",)
+#     data = [
+#         go.Scattergeo(
+#             lat=dataframe[x_axis],
+#             lon=dataframe[y_axis],
+#             mode='markers',
+#             marker=dict(
+#                 size=10,
+#                 symbol='circle',
+#                 color='blue',
+#                 opacity=0.7,
+#             ),
+#         )
+#     ]
+#     layout = go.Layout(
+#         geo=dict(
+#             showland=True,
+#         ),
+#         margin=dict(l=0, r=0, t=0, b=0),
+#     )
+
+#     fig1 = go.Figure(data=data, layout=layout)
+
+#     st.plotly_chart(fig1)
