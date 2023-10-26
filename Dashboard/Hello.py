@@ -32,7 +32,7 @@ with col1:
 with col2:
     
     st.markdown('#### A Rapid Prototyping Environment for Data Scientists')
-    st.write('Built with 💖 by [Sudhanshu Mukherjee](https://github.com/sudhanshumukherjeexx)')
+    st.write('Built with 💖 by [Sudhanshu Mukherjee](https://www.linkedin.com/in/sudhanshumukherjeexx/)')
     st.write('Research Advisor: [Dr. Alfa R Heryudono](http://www.math.umassd.edu/~aheryudono/index.html)')
     st.write('##### [University of Massachusetts at Dartmouth](https://www.umassd.edu/)')
     audio_file = open("audio/intro_audio.mp3", "rb")

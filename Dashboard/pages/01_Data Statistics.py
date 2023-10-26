@@ -6,10 +6,38 @@ import seaborn as sns
 import plotly.graph_objects as go
 import plotly.express as px
 
+col1, col2 = st.columns(2)
+with col1:
+    st.image("images/page_1.gif")
+with col2:
+    st.markdown('## Dataset Overview')
+    st.markdown("Get a quick grasp of your dataset's key characteristics: features, data types, shape, missing values count, and feature correlations.")
+#st.image("images/page_1.gif",use_column_width=True)
+st.divider()
+
+col1, col2, col3, col4, col5, col6 = st.columns(6)
+
+with col1:
+    st.markdown('`Data Header`')
+    st.markdown("A glimpse of your dataset's initial rows, revealing key information and a snapshot of your data.")
+with col2:
+    st.markdown('`Features Available`')
+    st.markdown("A list of the dataset's variables, providing insights into the data's dimensions and content.")
+with col3:
+    st.markdown('`Features Datatypes`')
+    st.markdown("An overview of the data types associated with each feature, essential for data interpretation and manipulation.")
+with col4:
+    st.markdown('`Shape of Data`')
+    st.markdown("A concise summary of the dataset's dimensions, highlighting the number of rows and columns.")
+with col5:
+    st.markdown('`Missing value count`')
+    st.markdown("A tally of the number of missing or undefined values in the dataset, crucial for data quality assessment.")
+with col6:
+    st.markdown('`Feature Correlation`')
+    st.markdown("Insights into the relationships and associations among different variables in the dataset.")
+st.divider()    
 
 
-st.title('Prepup : Pre Processing Utility Package')
-st.text('Prepup is a free open-source package that lets you inspect, explore, visualize, and perform pre-processing tasks on datasets in your windows/macOS terminal.\nThis is a dashboard version of the package...')
 
 # Load DataFrame
 df = st.session_state.get('df')
