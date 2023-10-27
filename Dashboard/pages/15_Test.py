@@ -305,3 +305,81 @@
 #     fig1 = go.Figure(data=data, layout=layout)
 
 #     st.plotly_chart(fig1)
+
+import pandas as pd
+import plotly.express as px
+import numpy as np
+import streamlit as st
+
+def q_q_plots(dataframe):
+    # Get the numerical columns
+    numerical_columns = dataframe.select_dtypes(include=[np.number]).columns
+    for column in numerical_columns:
+        # Sort the data by the current numerical column
+        sorted_data = dataframe.sort_values(by=[column])
+        # Calculate the quantiles or ranks
+        num_points = len(dataframe)
+        quantiles = np.arange(1, num_points + 1) / (num_points + 1)
+        # Create the tail-tail plot for the current column
+        fig = px.scatter(sorted_data, x=column, y=quantiles, labels={column: "Data Values", "y": "Quantiles"}, hover_data=column, title=column)
+        # Add a straight line for expected quantiles of a normal distribution
+        fig.add_shape(
+            type='line',
+            x0=sorted_data[column].min(),
+            x1=sorted_data[column].max(),
+            y0=0,
+            y1=1,
+            line=dict(color='red', width=2)
+        )
+        st.plotly_chart(fig)
+
+
+
+import pandas as pd
+import plotly.graph_objects as go
+import numpy as np
+import plotly.subplots as sp
+
+def hist_qq_plots(dataframe):
+    # Get the numerical columns
+    numerical_columns = dataframe.select_dtypes(include=[np.number]).columns
+    for column in numerical_columns:
+        st.markdown(f"##### {column}".upper())
+        # Create a subplot with 1 row and 2 columns
+        fig = sp.make_subplots(rows=1, cols=2, subplot_titles=("Histogram", "QQ Plot"))
+        # Generate the histogram
+        histogram = go.Histogram(x=dataframe[column], name="Histogram")
+        fig.add_trace(histogram, row=1, col=1)
+        # Sort the data by the current numerical column
+        sorted_data = dataframe.sort_values(by=[column])
+        # Calculate the quantiles or ranks
+        num_points = len(dataframe)
+        quantiles = np.arange(1, num_points + 1) / (num_points + 1)
+        # Create the QQ plot for the current column
+        qq_plot = go.Scatter(x=sorted_data[column], y=quantiles, mode='markers', name="QQ Plot")
+        fig.add_trace(qq_plot, row=1, col=2)
+        # Add a straight line for expected quantiles of a normal distribution in the QQ plot
+        fig.add_shape(
+            type='line',
+            x0=sorted_data[column].min(),
+            x1=sorted_data[column].max(),
+            y0=0,
+            y1=1,
+            line=dict(color='black', width=2),
+            row=1,
+            col=2
+        )
+
+        st.plotly_chart(fig)
+
+# Example usage:
+# hist_qq_plots(your_dataframe)
+
+
+
+
+df = st.session_state.get('df')
+df = df.to_pandas()
+# Example usage:
+#q_q_plots(df)
+hist_qq_plots(df)

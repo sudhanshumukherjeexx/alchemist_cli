@@ -51,72 +51,72 @@ if imputation_method == "2. Replace Missing Values with Specific Value":
 # Button to trigger imputation
 if st.button("Impute", use_container_width=True):
     if imputation_method == "1. Drop Missing Values":
-        df = df.drop_nulls()
+        df_processed = df.drop_nulls()
         st.success("Missing values dropped successfully.")
-        st.session_state.df_processed = df
+        st.session_state.df_processed = df_processed
     elif imputation_method == "2. Replace Missing Values with Specific Value":
         if placeholder_value is not None:
-            df = df.fill_null(placeholder_value)
+            df_processed = df.fill_null(placeholder_value)
             st.success(f"Missing values replaced with {placeholder_value} successfully.")
-            st.session_state.df_processed = df
+            st.session_state.df_processed = df_processed
         else:
             st.error("Please enter a specific value for imputation.")
     elif imputation_method == "3. Impute Missing Data with Fill Forward Strategy":
-        df = df.select(pl.all().forward_fill())
+        df_processed = df.select(pl.all().forward_fill())
         st.success(f"Missing values replaced with forward fill strategy successfully.")
-        st.session_state.df_processed = df
+        st.session_state.df_processed = df_processed
     elif imputation_method == "4. Impute Missing Data with Backward Fill Strategy":
-        df = df.fill_null(strategy="backward")
+        df_processed = df.fill_null(strategy="backward")
         st.success(f"Missing values replaced with forward fill strategy successfully.")
-        st.session_state.df_processed = df
+        st.session_state.df_processed = df_processed
     elif imputation_method == "5. Impute Missing Data based on Distribution of Feature":
-        df = df.to_pandas()
-        for column in df.columns:
-                if df[column].dtype != pl.Categorical and df[column].dtype != pl.Date and df[column].dtype != pl.Datetime and df[column].dtype != pl.Duration and df[column].dtype != pl.Time and df[column].dtype != pl.Utf8 and df[column].dtype != pl.Boolean and df[column].dtype != pl.Null and df[column].dtype != pl.Object and df[column].dtype != pl.Unknown:
-                    mean = df[column].mean()
-                    std = df[column].std()
-                    random_values = np.random.normal(loc=mean, scale=std, size=df[column].isnull().sum())
-                    df[column] = df[column].fillna(pd.Series(random_values,index=df[column][df[column].isnull()].index))
-        df = pl.from_pandas(df)
+        df_processed = df.to_pandas()
+        for column in df_processed.columns:
+                if df_processed[column].dtype != pl.Categorical and df_processed[column].dtype != pl.Date and df_processed[column].dtype != pl.Datetime and df_processed[column].dtype != pl.Duration and df_processed[column].dtype != pl.Time and df_processed[column].dtype != pl.Utf8 and df_processed[column].dtype != pl.Boolean and df_processed[column].dtype != pl.Null and df_processed[column].dtype != pl.Object and df_processed[column].dtype != pl.Unknown:
+                    mean = df_processed[column].mean()
+                    std = df_processed[column].std()
+                    random_values = np.random.normal(loc=mean, scale=std, size=df_processed[column].isnull().sum())
+                    df_processed[column] = df_processed[column].fillna(pd.Series(random_values,index=df_processed[column][df_processed[column].isnull()].index))
+        df_processed = pl.from_pandas(df_processed)
         st.success(f"Missing values replaced with based on distribution of the feature successfully.")
-        st.session_state.df_processed = df
+        st.session_state.df_processed = df_processed
     elif imputation_method == "6. Impute Missing Data with Mean":
-        df = df.to_pandas()
-        for column in df.columns:
-            if df[column].dtype != pl.Categorical and df[column].dtype != pl.Date and df[column].dtype != pl.Datetime and df[column].dtype != pl.Duration and df[column].dtype != pl.Time and df[column].dtype != pl.Utf8 and df[column].dtype != pl.Boolean and df[column].dtype != pl.Null and df[column].dtype != pl.Object and df[column].dtype != pl.Unknown:
-                df[column] = df[column].fillna(df[column].mean())
-        df = pl.from_pandas(df)
+        df_processed = df.to_pandas()
+        for column in df_processed.columns:
+            if df_processed[column].dtype != pl.Categorical and df_processed[column].dtype != pl.Date and df_processed[column].dtype != pl.Datetime and df_processed[column].dtype != pl.Duration and df_processed[column].dtype != pl.Time and df_processed[column].dtype != pl.Utf8 and df_processed[column].dtype != pl.Boolean and df_processed[column].dtype != pl.Null and df_processed[column].dtype != pl.Object and df_processed[column].dtype != pl.Unknown:
+                df_processed[column] = df_processed[column].fillna(df_processed[column].mean())
+        df_processed = pl.from_pandas(df_processed)
         st.success(f"Missing values replaced with mean successfully.")
-        st.session_state.df_processed = df        
+        st.session_state.df_processed = df_processed        
     elif imputation_method == "7. Impute Missing Data with Median":
-        df = df.to_pandas()
-        for column in df.columns:
-            if df[column].dtype != pl.Categorical and df[column].dtype != pl.Date and df[column].dtype != pl.Datetime and df[column].dtype != pl.Duration and df[column].dtype != pl.Time and df[column].dtype != pl.Utf8 and df[column].dtype != pl.Boolean and df[column].dtype != pl.Null and df[column].dtype != pl.Object and df[column].dtype != pl.Unknown:
-                df[column] = df[column].fillna(df[column].median())
-        df = pl.from_pandas(df)
+        df_processed = df.to_pandas()
+        for column in df_processed.columns:
+            if df_processed[column].dtype != pl.Categorical and df_processed[column].dtype != pl.Date and df_processed[column].dtype != pl.Datetime and df_processed[column].dtype != pl.Duration and df_processed[column].dtype != pl.Time and df_processed[column].dtype != pl.Utf8 and df_processed[column].dtype != pl.Boolean and df_processed[column].dtype != pl.Null and df_processed[column].dtype != pl.Object and df_processed[column].dtype != pl.Unknown:
+                df_processed[column] = df_processed[column].fillna(df_processed[column].median())
+        df_processed = pl.from_pandas(df_processed)
         st.success(f"Missing values replaced with median successfully.")
-        st.session_state.df_processed = df
+        st.session_state.df_processed = df_processed
     elif imputation_method == "8. Impute Missing Data with Nearest Neighbours":
-        df = df.to_pandas()
-        for column in df.columns:
-            if df[column].dtype != pl.Categorical and df[column].dtype != pl.Date and df[column].dtype != pl.Datetime and df[column].dtype != pl.Duration and df[column].dtype != pl.Time and df[column].dtype != pl.Utf8 and df[column].dtype != pl.Boolean and df[column].dtype != pl.Null and df[column].dtype != pl.Object and df[column].dtype != pl.Unknown:
-                missing_inds = df[column].isnull()
+        df_processed = df.to_pandas()
+        for column in df_processed.columns:
+            if df_processed[column].dtype != pl.Categorical and df_processed[column].dtype != pl.Date and df_processed[column].dtype != pl.Datetime and df_processed[column].dtype != pl.Duration and df_processed[column].dtype != pl.Time and df_processed[column].dtype != pl.Utf8 and df_processed[column].dtype != pl.Boolean and df_processed[column].dtype != pl.Null and df_processed[column].dtype != pl.Object and df_processed[column].dtype != pl.Unknown:
+                missing_inds = df_processed[column].isnull()
                 non_missing_inds = ~missing_inds
-                non_missing_vals = df[column][non_missing_inds]
-                closest_inds = np.abs(df[column][missing_inds].values - non_missing_vals.values.reshape(-1,1)).argmin(axis=0)
-                df.loc[missing_inds, column] = non_missing_vals.iloc[closest_inds].values
-        df = pl.from_pandas(df)
+                non_missing_vals = df_processed[column][non_missing_inds]
+                closest_inds = np.abs(df_processed[column][missing_inds].values - non_missing_vals.values.reshape(-1,1)).argmin(axis=0)
+                df_processed.loc[missing_inds, column] = non_missing_vals.iloc[closest_inds].values
+        df_processed = pl.from_pandas(df_processed)
         st.success(f"Missing values replaced with median successfully.")
-        st.session_state.df_processed = df
+        st.session_state.df_processed = df_processed
 
 st.divider()
 
 col1, col2 = st.columns(2)
 # Download button to save the processed data as a new session state
-with col1:
-    col4,col5,col6 = st.columns(3)
-    with col5:
-        st.image("images/download.png", use_column_width=True)
+with col2:
+    #col4,col5,col6 = st.columns(3)
+    #with col5:
+        #st.image("images/download.png", use_column_width=True)
         if "df_processed" in st.session_state:
             csv_data = st.session_state.df_processed.write_csv()
             st.download_button(
@@ -129,20 +129,22 @@ with col1:
         else:
             if st.button('Download Processed Data',use_container_width=True):
                 st.write('Recommended: Impute values first!')
-    with col6:
+    #with col6:
         st.write("")
-    with col4:
-        st.image("images/table.png", use_column_width=True)
-        if st.button("Display Processed Data"):
+with col1:
+    #with col4:
+        #st.image("images/table.png", use_column_width=True)
+        if st.button("Display Processed Data",use_container_width=True):
             #if df is not None:
             if "df_processed" in st.session_state:
                 st.success("Processed data has been saved as a new session state. You can download it now.")
                 st.write("Processed Data:")
                 st.write(st.session_state.df_processed.head())
-                
+                        
             else:
                 st.write('Recommended: Impute values first!')
-    with col6:
+    #with col6:
         st.write("")
 
 
+#st.session_state['df_processed'] = df_processed
