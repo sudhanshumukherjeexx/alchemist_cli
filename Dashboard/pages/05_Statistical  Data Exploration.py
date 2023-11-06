@@ -45,9 +45,12 @@ if df is None:
     st.warning("Please upload a dataset to get started.")
 else:
     st.divider()
-
-    # Create a dropdown menu to choose the session state
-    selected_session_state = st.selectbox("Select Session State", ["Intial DataFrame", "DataFrame after Missing value Imputation"])
+    st.markdown('🖲️Select the **session state** and **click run analysis**')
+    col9, col10 = st.columns(2)
+    with col9:
+        # Create a dropdown menu to choose the session state
+        selected_session_state = st.selectbox("Select Session State", ["Intial DataFrame", "DataFrame after Missing value Imputation"])
+        st.divider()
 
     # Handle the case when "Session State 2" is None
     if selected_session_state == "Intial DataFrame":
@@ -151,14 +154,17 @@ else:
         fig.update_traces(mode="lines+markers+text", text=kurtosis_df['Columns'], textposition="top left")
         st.plotly_chart(fig)
 
-
+    
     # Sidebar with radio buttons
     st.sidebar.title("Select Analysis:")
     analysis_option = st.sidebar.radio("Choose an analysis:", ["Kurtosis", "Skewness","Find Outliers", "Distribution and Q-Q Plots"])
 
-    # Toggle button to run the analysis
-    run_analysis = st.button("Run Analysis")
-    st.divider()
+    with col10:
+        # Toggle button to run the analysis
+        st.markdown("#### ")
+        #st.write(" ")
+        run_analysis = st.button("Run Analysis", use_container_width=True)
+        st.divider()
 
     if run_analysis:
         if analysis_option == "Kurtosis":

@@ -139,7 +139,7 @@ with col1:
             if "df_processed" in st.session_state:
                 st.success("Processed data has been saved as a new session state. You can download it now.")
                 st.write("Processed Data:")
-                st.write(st.session_state.df_processed.head())
+                st.dataframe(st.session_state.df_processed)
                         
             else:
                 st.write('Recommended: Impute values first!')
